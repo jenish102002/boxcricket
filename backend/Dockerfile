@@ -12,5 +12,5 @@ WORKDIR /app
 COPY --from=build /app/target/boxcricket-backend-0.0.1-SNAPSHOT.jar app.jar
 # Expose the default Spring Boot port
 EXPOSE 8080
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application with the production profile enabled by default
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
