@@ -1,0 +1,34 @@
+# IDE and OS files
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Node/Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Maven/Backend
+target/
+*.jar
+*.war
+*.ear
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database
+data/
+*.db
+*.sqlite
+
+# Secrets
+.env
+.env.*
+!.env.example

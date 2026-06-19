@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #FAF9F6;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F2F0EA;
+  --color-ink: #1A1A1A;
+  --color-muted: #6B6B6B;
+  --color-border: #E8E6E0;
+  --color-accent: #E07A5F;
+  --color-accent-deep: #C75D43;
+  --color-teal: #2A9D8F;
+  --color-danger: #D1495B;
+
+  --font-fraunces: 'Fraunces', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --radius-card: 16px;
+  --radius-input: 12px;
+  --radius-pill: 9999px;
+
+  --shadow-soft: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.07);
+  --shadow-hover: 0 4px 6px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.10);
+}
+
+/* ─── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  --bg: #FAF9F6;
+  --surface: #FFFFFF;
+  --surface-alt: #F2F0EA;
+  --ink: #1A1A1A;
+  --muted: #6B6B6B;
+  --border: #E8E6E0;
+  --accent: #E07A5F;
+  --accent-deep: #C75D43;
+  --teal: #2A9D8F;
+  --danger: #D1495B;
+}
+
+/* ─── Base Styles ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography ────────────────────────────────────────────── */
+.font-display {
+  font-family: 'Fraunces', Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+
+/* ─── Focus Styles ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-alt); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ─── Transitions ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Utility Classes ───────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-accent text-white font-medium rounded-pill
+           transition-all duration-150 hover:bg-accent-deep hover:-translate-y-0.5 hover:shadow-hover
+           focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-ink text-ink font-medium rounded-input
+           transition-all duration-150 hover:bg-ink hover:text-white
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 text-muted font-medium
+           transition-all duration-150 hover:text-ink underline-offset-4 hover:underline;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-danger text-white font-medium rounded-input
+           transition-all duration-150 hover:opacity-90
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-surface border border-border rounded-card shadow-soft p-6;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-surface border border-border rounded-input text-ink placeholder-muted
+           transition-all duration-150 
+           focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20
+           disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .badge-available {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-teal/10 text-teal border border-teal/20;
+  }
+
+  .badge-booked {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-muted/10 text-muted border border-muted/20;
+  }
+
+  .badge-blocked {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-danger/10 text-danger border border-danger/20;
+  }
+
+  .badge-confirmed {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-teal/10 text-teal border border-teal/20;
+  }
+
+  .badge-cancelled {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-danger/10 text-danger border border-danger/20;
+  }
+
+  .section-heading {
+    @apply font-fraunces text-3xl md:text-4xl font-semibold text-ink leading-tight;
+  }
+
+  .page-title {
+    @apply font-fraunces text-4xl md:text-5xl font-bold text-ink leading-tight;
+  }
+
+  .kpi-number {
+    @apply font-mono text-3xl font-semibold text-ink;
+  }
+}
+
+/* ─── Skeleton Animation ────────────────────────────────────── */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-alt) 25%, var(--border) 50%, var(--surface-alt) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Slot Chip ─────────────────────────────────────────────── */
+.slot-chip {
+  @apply relative px-3 py-2 rounded-input border text-sm font-medium transition-all duration-150 cursor-pointer
+         select-none text-center;
+}
+
+.slot-chip-available {
+  @apply border-border text-ink hover:border-accent hover:bg-accent/5;
+}
+
+.slot-chip-selected {
+  @apply border-accent bg-accent text-white shadow-soft;
+}
+
+.slot-chip-booked {
+  @apply border-border/50 text-muted/50 bg-surface-alt cursor-not-allowed;
+}
+
+/* ─── Chart Tooltip ─────────────────────────────────────────── */
+.recharts-tooltip-wrapper {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+}
+
+/* ─── Table Styles ──────────────────────────────────────────── */
+.admin-table {
+  @apply w-full text-sm;
+}
+
+.admin-table th {
+  @apply text-xs font-medium text-muted uppercase tracking-wider py-3 px-4 text-left border-b border-border;
+}
+
+.admin-table td {
+  @apply py-4 px-4 border-b border-border/60 text-ink;
+}
+
+.admin-table tr:last-child td {
+  @apply border-b-0;
+}
+
+.admin-table tr:hover td {
+  @apply bg-surface-alt/50;
+}
