@@ -96,6 +96,52 @@ Because the database initializes empty on the first run, you will need to manual
 
 ---
 
+## 📡 API Endpoints
+
+The backend provides a comprehensive REST API. Below are the available endpoints:
+
+### Authentication
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/auth/register` | Register a new user | Public |
+| POST | `/api/auth/login` | Authenticate and get JWT | Public |
+| GET | `/api/auth/me` | Get current user profile | User / Admin |
+
+### Venues
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/api/venues` | Get all active venues | Public |
+| GET | `/api/venues/{id}` | Get venue details | Public |
+| POST | `/api/venues` | Create a new venue | Admin |
+| PUT | `/api/venues/{id}` | Update an existing venue | Admin |
+| DELETE | `/api/venues/{id}` | Delete or deactivate a venue | Admin |
+
+### Slots
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/api/venues/{id}/slots` | Get future slots for a venue | Public |
+| GET | `/api/slots` | Get all slots (with pagination/filters)| Admin |
+| GET | `/api/slots/{id}` | Get specific slot details | Public |
+| POST | `/api/slots` | Create a single slot | Admin |
+| POST | `/api/slots/bulk` | Generate multiple repeating slots | Admin |
+| DELETE | `/api/slots/{id}` | Delete a slot | Admin |
+
+### Bookings
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/bookings` | Book a specific slot | User |
+| GET | `/api/bookings/me` | Get current user's bookings | User |
+| GET | `/api/bookings` | Get all platform bookings | Admin |
+| PATCH | `/api/bookings/{id}/cancel` | Cancel a booking | User / Admin |
+
+### Analytics
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/api/analytics/summary` | Get platform KPI summary | Admin |
+| GET | `/api/analytics/venues` | Get venue performance metrics | Admin |
+
+---
+
 ## 📸 Screenshots
 
 *(Replace these placeholders with actual screenshots of your application)*
