@@ -34,8 +34,13 @@ api.interceptors.response.use(
   (error) => {
     NProgress.done() // Finish progress bar on error
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout()
-      window.location.href = '/login'
+      // Prevent redirect loop if the 401 is from the login or register page itself
+      const isAuthEndpoint = error.config?.url?.includes('/auth/login') || error.config?.url?.includes('/auth/register')
+      
+      if (!isAuthEndpoint) {
+        useAuthStore.getState().logout()
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }
