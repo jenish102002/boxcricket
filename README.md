@@ -142,19 +142,6 @@ The backend provides a comprehensive REST API. Below are the available endpoints
 
 ---
 
-## 📸 Screenshots
-
-*(Replace these placeholders with actual screenshots of your application)*
-
-| Public Home | Admin Dashboard |
-| :---: | :---: |
-| <img src="https://via.placeholder.com/600x350.png?text=Public+Homepage" alt="Public Homepage" width="400"/> | <img src="https://via.placeholder.com/600x350.png?text=Admin+Dashboard" alt="Admin Dashboard" width="400"/> |
-
-| Venue Details & Booking | Bulk Slot Generation |
-| :---: | :---: |
-| <img src="https://via.placeholder.com/600x350.png?text=Booking+Flow" alt="Booking Flow" width="400"/> | <img src="https://via.placeholder.com/600x350.png?text=Bulk+Slots" alt="Bulk Slots" width="400"/> |
-
----
 
 ## 🤝 Contributing
 
