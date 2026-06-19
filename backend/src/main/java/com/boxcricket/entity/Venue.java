@@ -31,6 +31,7 @@ public class Venue {
     @Column(nullable = false)
     private String location;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column(nullable = false, precision = 10, scale = 2)

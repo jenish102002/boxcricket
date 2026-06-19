@@ -21,13 +21,16 @@ const schema = z.object({
 })
 
 function VenueForm({ onSubmit, defaultValues, isPending }) {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ? {
       ...defaultValues,
       pricePerSlot: String(defaultValues.pricePerSlot),
     } : { active: true },
   })
+
+  const imageUrlValue = watch('imageUrl')
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
@@ -44,11 +47,29 @@ function VenueForm({ onSubmit, defaultValues, isPending }) {
         <label className="block text-sm font-medium text-ink mb-1.5">Description</label>
         <textarea rows={3} className="input-field resize-none" {...register('description')} />
       </div>
+      
       <div>
-        <label className="block text-sm font-medium text-ink mb-1.5">Image URL</label>
-        <input className="input-field" placeholder="https://..." {...register('imageUrl')} />
+        <label className="block text-sm font-medium text-ink mb-1.5">Venue Photo</label>
+        <div className="flex items-center gap-4">
+          {imageUrlValue ? (
+             <img src={imageUrlValue} alt="Preview" className="w-16 h-16 rounded-input object-cover shrink-0 border border-line" />
+          ) : (
+             <div className="w-16 h-16 rounded-input bg-surface-alt flex items-center justify-center text-muted border border-line text-xs font-medium">None</div>
+          )}
+          <div className="flex-1">
+             <input type="file" accept="image/*" className="input-field py-2 text-sm" onChange={(e) => {
+                const file = e.target.files[0]
+                if (file) {
+                   const reader = new FileReader()
+                   reader.onloadend = () => setValue('imageUrl', reader.result)
+                   reader.readAsDataURL(file)
+                }
+             }} />
+          </div>
+        </div>
         {errors.imageUrl && <p className="text-danger text-xs mt-1">{errors.imageUrl.message}</p>}
       </div>
+
       <div>
         <label className="block text-sm font-medium text-ink mb-1.5">Price per Slot (₹)</label>
         <input type="number" step="0.01" className="input-field" {...register('pricePerSlot')} />
