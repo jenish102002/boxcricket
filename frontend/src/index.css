@@ -230,3 +230,13 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto;
 .admin-table tr:hover td {
   @apply bg-surface-alt/50;
 }
+
+/* Override NProgress Bar to match the BoxCricket terracotta theme */
+#nprogress .bar {
+  background: var(--color-primary) !important;
+  height: 4px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--color-primary), 0 0 5px var(--color-primary) !important;
+}
