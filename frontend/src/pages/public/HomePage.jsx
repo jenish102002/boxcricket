@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { venueApi } from '../../api/venues'
 import VenueCard from '../../components/venue/VenueCard'
 import { SkeletonCard } from '../../components/ui/Skeleton'
-import { ArrowRight, CalendarCheck, MapPin, ShieldCheck } from 'lucide-react'
+import { ArrowRight, CalendarCheck, MapPin, ShieldCheck, Search, Navigation } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const steps = [
   { icon: MapPin, title: 'Choose a Venue', desc: 'Browse our curated selection of premium box cricket arenas.' },
@@ -12,10 +13,43 @@ const steps = [
 ]
 
 export default function HomePage() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [location, setLocation] = useState({ lat: null, lng: null })
+  const [isLocating, setIsLocating] = useState(false)
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
   const { data: venues, isLoading } = useQuery({
-    queryKey: ['venues'],
-    queryFn: venueApi.getAll,
+    queryKey: ['venues', debouncedSearch, location.lat, location.lng],
+    queryFn: () => venueApi.getAll({ search: debouncedSearch, lat: location.lat, lng: location.lng }),
   })
+
+  const handleDetectLocation = () => {
+    setIsLocating(true)
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
+          setIsLocating(false)
+        },
+        (error) => {
+          console.error(error)
+          alert("Could not detect location. Please ensure location permissions are granted.")
+          setIsLocating(false)
+        }
+      )
+    } else {
+      alert("Geolocation is not supported by your browser.")
+      setIsLocating(false)
+    }
+  }
+
+  const clearLocation = () => setLocation({ lat: null, lng: null })
 
   return (
     <div>
@@ -40,9 +74,9 @@ export default function HomePage() {
               Premium indoor venues, flexible time slots, instant confirmation. Play on your schedule.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/venues" className="btn-primary text-base px-8 py-4">
-                Browse Venues <ArrowRight size={16} />
-              </Link>
+              <a href="#explore" className="btn-primary text-base px-8 py-4">
+                Explore Venues <ArrowRight size={16} />
+              </a>
               <Link to="/register" className="inline-flex items-center gap-2 px-8 py-4 border border-white/20 text-white rounded-pill font-medium hover:bg-white/10 transition-all duration-150">
                 Create Account
               </Link>
@@ -76,27 +110,49 @@ export default function HomePage() {
       </section>
 
       {/* ── Featured Venues ── */}
-      <section className="py-20">
+      <section id="explore" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
-              <h2 className="section-heading mb-2">Featured venues</h2>
-              <p className="text-muted">Hand-picked, premium box cricket arenas.</p>
+              <h2 className="section-heading mb-2">Explore Venues</h2>
+              <p className="text-muted">Find the perfect pitch near you.</p>
             </div>
-            <Link to="/venues" className="btn-ghost hidden sm:flex items-center gap-1">
-              View all <ArrowRight size={14} />
-            </Link>
+            
+            {/* Search & Location Controls */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  type="text"
+                  placeholder="Search by name or city..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="input-field pl-9 py-2 w-full text-sm"
+                />
+              </div>
+              
+              <button 
+                onClick={location.lat ? clearLocation : handleDetectLocation}
+                disabled={isLocating}
+                className={`flex items-center justify-center gap-2 px-4 py-2 rounded-input text-sm font-medium border transition-colors w-full sm:w-auto ${
+                  location.lat 
+                    ? 'bg-accent/10 text-accent border-accent/20 hover:bg-danger/10 hover:text-danger hover:border-danger/20'
+                    : 'bg-surface border-border text-ink hover:border-accent hover:text-accent'
+                }`}
+              >
+                <Navigation size={16} className={isLocating ? 'animate-pulse' : ''} />
+                {isLocating ? 'Locating...' : location.lat ? 'Clear GPS' : 'Find Nearest'}
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {isLoading
               ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : venues?.slice(0, 4).map(v => <VenueCard key={v.id} venue={v} />)
+              : venues?.length === 0 
+                ? <div className="col-span-full py-12 text-center text-muted">No venues found matching your criteria.</div>
+                : venues?.map(v => <VenueCard key={v.id} venue={v} />)
             }
-          </div>
-
-          <div className="text-center mt-10 sm:hidden">
-            <Link to="/venues" className="btn-secondary">View all venues</Link>
           </div>
         </div>
       </section>

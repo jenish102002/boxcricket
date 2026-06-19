@@ -25,8 +25,11 @@ public class VenueController {
 
     @GetMapping
     @Operation(summary = "List all active venues (public)")
-    public ResponseEntity<ApiResponse<List<VenueResponse>>> getActiveVenues() {
-        return ResponseEntity.ok(ApiResponse.success(venueService.getAllActiveVenues()));
+    public ResponseEntity<ApiResponse<List<VenueResponse>>> getActiveVenues(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng) {
+        return ResponseEntity.ok(ApiResponse.success(venueService.getAllActiveVenues(search, lat, lng)));
     }
 
     @GetMapping("/all")

@@ -41,6 +41,12 @@ public class Venue {
     @Builder.Default
     private Boolean active = true;
 
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -1,7 +1,7 @@
 import api from './axios'
 
 export const venueApi = {
-  getAll: () => api.get('/venues').then(r => r.data.data),
+  getAll: (params) => api.get('/venues', { params }).then(r => r.data.data),
   getAllAdmin: () => api.get('/venues/all').then(r => r.data.data),
   getById: (id) => api.get(`/venues/${id}`).then(r => r.data.data),
   create: (data) => api.post('/venues', data).then(r => r.data.data),

@@ -31,6 +31,12 @@ export default function VenueCard({ venue }) {
         <div className="flex items-center gap-1 text-muted text-sm mb-3">
           <MapPin size={13} className="shrink-0" />
           <span className="truncate">{venue.location}</span>
+          {venue.distanceKm !== undefined && venue.distanceKm !== null && (
+            <>
+              <span className="mx-1 text-border">•</span>
+              <span className="font-medium text-accent whitespace-nowrap">{venue.distanceKm} km away</span>
+            </>
+          )}
         </div>
         {venue.description && (
           <p className="text-muted text-sm line-clamp-2 mb-4">{venue.description}</p>

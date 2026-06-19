@@ -24,4 +24,8 @@ public class VenueRequest {
     private BigDecimal pricePerSlot;
 
     private Boolean active = true;
+
+    private Double latitude;
+
+    private Double longitude;
 }

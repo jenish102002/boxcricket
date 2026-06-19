@@ -44,6 +44,10 @@ public class BoxCricketApplication {
                 
                 // Fix broken Unsplash image in production database if it was already seeded
                 jdbcTemplate.execute("UPDATE venues SET image_url = 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80' WHERE image_url LIKE '%photo-1593341646782-e0be1f5e4e75%';");
+
+                // Backfill GPS coordinates for demo venues
+                jdbcTemplate.execute("UPDATE venues SET latitude = 19.1136, longitude = 72.8697 WHERE name = 'Royal Box Cricket' AND latitude IS NULL;");
+                jdbcTemplate.execute("UPDATE venues SET latitude = 12.9352, longitude = 77.6245 WHERE name = 'Urban Smash Arena' AND latitude IS NULL;");
                 
                 logger.info("✅ Database schema verified: image_url is TEXT");
             } catch (Exception e) {
@@ -80,6 +84,8 @@ public class BoxCricketApplication {
                         .description("Premium astroturf with floodlights, dugout seating, and equipment rental available on site.")
                         .pricePerSlot(new BigDecimal("1200.00"))
                         .imageUrl("https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80")
+                        .latitude(19.1136)
+                        .longitude(72.8697)
                         .active(true)
                         .build();
                 venueRepository.save(venue1);
@@ -90,6 +96,8 @@ public class BoxCricketApplication {
                         .description("High quality enclosed cricket arena. Open 24/7. Perfect for night tournaments.")
                         .pricePerSlot(new BigDecimal("1500.00"))
                         .imageUrl("https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&q=80&w=800")
+                        .latitude(12.9352)
+                        .longitude(77.6245)
                         .active(true)
                         .build();
                 venueRepository.save(venue2);

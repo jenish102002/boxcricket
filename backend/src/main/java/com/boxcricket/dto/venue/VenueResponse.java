@@ -22,6 +22,9 @@ public class VenueResponse {
     private BigDecimal pricePerSlot;
     private Boolean active;
     private LocalDateTime createdAt;
+    private Double latitude;
+    private Double longitude;
+    private Double distanceKm; // Optional, computed if GPS is passed
 
     public static VenueResponse from(Venue venue) {
         return VenueResponse.builder()
@@ -33,6 +36,8 @@ public class VenueResponse {
                 .pricePerSlot(venue.getPricePerSlot())
                 .active(venue.getActive())
                 .createdAt(venue.getCreatedAt())
+                .latitude(venue.getLatitude())
+                .longitude(venue.getLongitude())
                 .build();
     }
 }

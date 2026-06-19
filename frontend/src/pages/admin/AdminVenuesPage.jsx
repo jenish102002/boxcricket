@@ -15,6 +15,8 @@ const schema = z.object({
   name: z.string().min(2, 'Name required'),
   description: z.string().optional(),
   location: z.string().min(2, 'Location required'),
+  latitude: z.string().optional(),
+  longitude: z.string().optional(),
   imageUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   pricePerSlot: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Enter a valid price'),
   active: z.boolean().default(true),
@@ -26,6 +28,8 @@ function VenueForm({ onSubmit, defaultValues, isPending }) {
     defaultValues: defaultValues ? {
       ...defaultValues,
       pricePerSlot: String(defaultValues.pricePerSlot),
+      latitude: defaultValues.latitude ? String(defaultValues.latitude) : '',
+      longitude: defaultValues.longitude ? String(defaultValues.longitude) : '',
     } : { active: true },
   })
 
@@ -43,6 +47,20 @@ function VenueForm({ onSubmit, defaultValues, isPending }) {
         <input className="input-field" {...register('location')} />
         {errors.location && <p className="text-danger text-xs mt-1">{errors.location.message}</p>}
       </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-ink mb-1.5">Latitude (GPS)</label>
+          <input type="text" className="input-field" placeholder="e.g. 19.1136" {...register('latitude')} />
+          {errors.latitude && <p className="text-danger text-xs mt-1">{errors.latitude.message}</p>}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-ink mb-1.5">Longitude (GPS)</label>
+          <input type="text" className="input-field" placeholder="e.g. 72.8697" {...register('longitude')} />
+          {errors.longitude && <p className="text-danger text-xs mt-1">{errors.longitude.message}</p>}
+        </div>
+      </div>
+
       <div>
         <label className="block text-sm font-medium text-ink mb-1.5">Description</label>
         <textarea rows={3} className="input-field resize-none" {...register('description')} />
@@ -131,8 +149,22 @@ export default function AdminVenuesPage() {
     onError: (e) => toast(e?.response?.data?.message || 'Failed to delete venue', 'error'),
   })
 
-  const handleCreate = (data) => createMutation.mutate({ ...data, pricePerSlot: parseFloat(data.pricePerSlot) })
-  const handleUpdate = (data) => updateMutation.mutate({ id: editVenue.id, data: { ...data, pricePerSlot: parseFloat(data.pricePerSlot) } })
+  const handleCreate = (data) => createMutation.mutate({ 
+    ...data, 
+    pricePerSlot: parseFloat(data.pricePerSlot),
+    latitude: data.latitude ? parseFloat(data.latitude) : null,
+    longitude: data.longitude ? parseFloat(data.longitude) : null
+  })
+  
+  const handleUpdate = (data) => updateMutation.mutate({ 
+    id: editVenue.id, 
+    data: { 
+      ...data, 
+      pricePerSlot: parseFloat(data.pricePerSlot),
+      latitude: data.latitude ? parseFloat(data.latitude) : null,
+      longitude: data.longitude ? parseFloat(data.longitude) : null
+    } 
+  })
 
   return (
     <div className="space-y-6">
