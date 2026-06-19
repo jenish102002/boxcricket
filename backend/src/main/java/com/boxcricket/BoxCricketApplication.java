@@ -41,6 +41,10 @@ public class BoxCricketApplication {
             try {
                 // Ensure Postgres allows large Base64 images. 
                 jdbcTemplate.execute("ALTER TABLE venues ALTER COLUMN image_url TYPE TEXT;");
+                
+                // Fix broken Unsplash image in production database if it was already seeded
+                jdbcTemplate.execute("UPDATE venues SET image_url = 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80' WHERE image_url LIKE '%photo-1593341646782-e0be1f5e4e75%';");
+                
                 logger.info("✅ Database schema verified: image_url is TEXT");
             } catch (Exception e) {
                 logger.debug("Schema migration skipped (expected on SQLite)");
@@ -75,7 +79,7 @@ public class BoxCricketApplication {
                         .location("Andheri East, Mumbai")
                         .description("Premium astroturf with floodlights, dugout seating, and equipment rental available on site.")
                         .pricePerSlot(new BigDecimal("1200.00"))
-                        .imageUrl("https://images.unsplash.com/photo-1593341646782-e0be1f5e4e75?auto=format&fit=crop&q=80&w=800")
+                        .imageUrl("https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=800&q=80")
                         .active(true)
                         .build();
                 venueRepository.save(venue1);
