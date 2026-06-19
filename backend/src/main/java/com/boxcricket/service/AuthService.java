@@ -33,11 +33,16 @@ public class AuthService {
             throw new BadRequestException("Email already registered");
         }
 
+        Role userRole = Role.USER;
+        if ("ADMIN".equalsIgnoreCase(request.getRole())) {
+            userRole = Role.ADMIN;
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(userRole)
                 .build();
 
         userRepository.save(user);

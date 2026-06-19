@@ -12,6 +12,7 @@ const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+  role: z.enum(['USER', 'ADMIN']).default('USER'),
 })
 
 export default function RegisterPage() {
@@ -19,9 +20,12 @@ export default function RegisterPage() {
   const navigate = useNavigate()
   const [showPass, setShowPass] = useState(false)
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: { role: 'USER' }
   })
+
+  const currentRole = watch('role')
 
   const mutation = useMutation({
     mutationFn: authApi.register,
@@ -49,8 +53,32 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+          
+          <div className="grid grid-cols-2 gap-3 mb-2">
+            <button
+              type="button"
+              onClick={() => setValue('role', 'USER')}
+              className={`p-3 text-sm font-medium rounded-input border transition-colors ${
+                currentRole === 'USER' ? 'border-accent bg-accent/5 text-accent' : 'border-line text-muted hover:border-ink/20'
+              }`}
+            >
+              Player
+            </button>
+            <button
+              type="button"
+              onClick={() => setValue('role', 'ADMIN')}
+              className={`p-3 text-sm font-medium rounded-input border transition-colors ${
+                currentRole === 'ADMIN' ? 'border-accent bg-accent/5 text-accent' : 'border-line text-muted hover:border-ink/20'
+              }`}
+            >
+              Venue Owner
+            </button>
+          </div>
+
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-ink mb-1.5">Full name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-ink mb-1.5">
+              {currentRole === 'ADMIN' ? 'Owner name' : 'Full name'}
+            </label>
             <input
               id="name"
               type="text"
