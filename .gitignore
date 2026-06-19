@@ -32,3 +32,4 @@ data/
 .env
 .env.*
 !.env.example
+backend/src/main/resources/application-prod.properties
